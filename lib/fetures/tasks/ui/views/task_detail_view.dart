@@ -65,16 +65,21 @@ class _TaskDetailViewState extends ConsumerState<TaskDetailView> {
                   controller: _titleController,
                   decoration: const InputDecoration(labelText: 'Título'),
                   maxLines: 2,
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Campo requerido' : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Título requerido'
+                      : null,
                 ),
                 const SizedBox(height: 16),
-                CheckboxListTile(
-                  title: const Text('Completado'),
-                  value: _completed,
-                  onChanged: (value) {
-                    setState(() => _completed = value ?? false);
-                  },
+                Row(
+                  children: [
+                    Switch(
+                      value: _completed,
+                      onChanged: (value) {
+                        setState(() => _completed = value);
+                      },
+                    ),
+                    Text("Completado"),
+                  ],
                 ),
                 const Spacer(),
                 ElevatedButton.icon(
