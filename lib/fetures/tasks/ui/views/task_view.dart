@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prueba_task_manager/fetures/tasks/ui/providers.dart';
+import 'package:prueba_task_manager/fetures/countries/ui/views/country_view.dart';
+import 'package:prueba_task_manager/fetures/tasks/ui/provider.dart';
 import 'package:prueba_task_manager/fetures/tasks/ui/viewmodels/task_view_model.dart';
 import 'package:prueba_task_manager/fetures/tasks/ui/views/task_detail_view.dart';
 
@@ -12,17 +13,27 @@ class TaskView extends ConsumerWidget {
     final tasksAsync = ref.watch(taskViewModelProvider);
     final viewModel = ref.read(taskViewModelProvider.notifier);
 
+    Color primaryColor = Theme.of(context).colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: const Text('Gestor de Tareas'),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => CountryView()),
+              );
+            },
+            icon: Icon(Icons.map, color: primaryColor),
+          ),
           PopupMenuButton<Filter>(
             onSelected: (filter) {
               viewModel.toggleFilter(filter);
             },
-            icon: const Icon(Icons.filter_list, color: Colors.black),
+            icon: Icon(Icons.filter_list, color: primaryColor),
             color: Colors.white,
-            iconSize: 40,
             itemBuilder: (context) => [
               PopupMenuItem(
                 value: Filter.all,
@@ -30,7 +41,7 @@ class TaskView extends ConsumerWidget {
                   'Todos',
                   style: TextStyle(
                     color: viewModel.currentFilter == Filter.all
-                        ? Colors.deepPurple
+                        ? primaryColor
                         : null,
                   ),
                 ),
@@ -41,7 +52,7 @@ class TaskView extends ConsumerWidget {
                   'Completos',
                   style: TextStyle(
                     color: viewModel.currentFilter == Filter.complete
-                        ? Colors.deepPurple
+                        ? primaryColor
                         : null,
                   ),
                 ),
@@ -52,7 +63,7 @@ class TaskView extends ConsumerWidget {
                   'Incompletos',
                   style: TextStyle(
                     color: viewModel.currentFilter == Filter.incomplete
-                        ? Colors.deepPurple
+                        ? primaryColor
                         : null,
                   ),
                 ),
