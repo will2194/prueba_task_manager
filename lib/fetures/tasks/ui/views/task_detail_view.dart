@@ -26,19 +26,24 @@ class _TaskDetailViewState extends ConsumerState<TaskDetailView> {
 
   void _saveTask() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final viewModel = ref.read(taskViewModelProvider.notifier);
+      final viewModel = ref.read(taskDetailViewModelProvider.notifier);
+      final viewModelTask = ref.read(taskViewModelProvider.notifier);
 
       final isEditing = widget.task != null;
-      final id = widget.task?.id ?? DateTime.now().millisecondsSinceEpoch;
 
       final task = Task(
-        id: id,
+        id: widget.task?.id,
         title: _titleController.text.trim(),
         completed: _completed,
       );
 
-      //await viewModel.saveOrUpdateTask(task);
+      if (!isEditing) {
+        await viewModel.saveTask(task);
+      } else {
+        await viewModel.updateTask(task);
+      }
 
+      viewModelTask.loadTasks();
       if (mounted) Navigator.pop(context);
     }
   }
@@ -58,6 +63,7 @@ class _TaskDetailViewState extends ConsumerState<TaskDetailView> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Título'),
+                maxLines: 10,
                 validator: (value) =>
                     value == null || value.isEmpty ? 'Campo requerido' : null,
               ),

@@ -7,6 +7,8 @@ class GetTasksFromBdUseCase {
   GetTasksFromBdUseCase(this.repository);
 
   Future<List<Task>> call() async {
-    return repository.getTasksFromDb();
+    final tasks = await repository.getTasksFromDb();
+
+    return tasks;
   }
 }

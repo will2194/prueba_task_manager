@@ -15,7 +15,7 @@ class TaskDatabase {
       version: 1,
       onCreate: (db, _) {
         return db.execute(
-          'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, completed INTEGER)',
+          'CREATE TABLE tasks(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, completed INTEGER)',
         );
       },
     );
@@ -51,12 +51,8 @@ class TaskDatabase {
     );
   }
 
-  Future<void> createTask(TaskModel task) async {
+  Future<void> updateTask(int id, TaskModel task) async {
     final db = await database;
-    await db.insert(
-      'tasks',
-      task.toJsonDb(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    await db.update('tasks', task.toJson(), where: 'id = ?', whereArgs: [id]);
   }
 }

@@ -6,7 +6,10 @@ import 'package:prueba_task_manager/fetures/tasks/domain/entities/task.dart';
 import 'package:prueba_task_manager/fetures/tasks/domain/repositories/task_repository.dart';
 import 'package:prueba_task_manager/fetures/tasks/domain/usecases/get_task_usecase.dart';
 import 'package:prueba_task_manager/fetures/tasks/domain/usecases/get_tasks_from_bd_use_case.dart';
+import 'package:prueba_task_manager/fetures/tasks/domain/usecases/save_tasks_use_case.dart';
 import 'package:prueba_task_manager/fetures/tasks/domain/usecases/update_complete_task_use_case.dart';
+import 'package:prueba_task_manager/fetures/tasks/domain/usecases/update_task_use_case.dart';
+import 'package:prueba_task_manager/fetures/tasks/ui/viewmodels/task_detail_view_model.dart';
 import 'package:prueba_task_manager/fetures/tasks/ui/viewmodels/task_view_model.dart';
 
 final taskApiDatasourceProvider = Provider<TaskApiDatasource>((ref) {
@@ -40,6 +43,16 @@ final updateCompleteTaskUseCaseProvider = Provider<UpdateCompleteTaskUseCase>((
   return UpdateCompleteTaskUseCase(taskRepository);
 });
 
+final saveTasksUseCaseProvider = Provider<SaveTasksUseCase>((ref) {
+  final taskRepository = ref.watch(taskRepositoryProvider);
+  return SaveTasksUseCase(taskRepository);
+});
+
+final updateTaskUseCaseProvider = Provider<UpdateTaskUseCase>((ref) {
+  final taskRepository = ref.watch(taskRepositoryProvider);
+  return UpdateTaskUseCase(taskRepository);
+});
+
 final taskViewModelProvider =
     StateNotifierProvider<TaskViewModel, AsyncValue<List<Task>>>((ref) {
       final getTasksUseCase = ref.watch(getTasksUseCaseProvider);
@@ -52,4 +65,12 @@ final taskViewModelProvider =
         getTasksFromBdUseCase,
         updateCompleteTaskUseCase,
       );
+    });
+
+final taskDetailViewModelProvider =
+    StateNotifierProvider<TaskDetailViewModel, AsyncValue<bool>>((ref) {
+      final saveTasksUseCase = ref.watch(saveTasksUseCaseProvider);
+      final updateTaskUseCase = ref.watch(updateTaskUseCaseProvider);
+
+      return TaskDetailViewModel(saveTasksUseCase, updateTaskUseCase);
     });

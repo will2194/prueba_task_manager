@@ -28,4 +28,9 @@ class TaskRepositoryImpl implements TaskRepository {
   Future<void> updateCompleteTask(int id, bool completed) async {
     await db.updateCompleteTask(id, completed);
   }
+
+  @override
+  Future<void> updateTask(Task task) async {
+    await db.updateTask(task);
+  }
 }

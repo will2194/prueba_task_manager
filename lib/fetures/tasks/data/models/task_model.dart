@@ -1,15 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:prueba_task_manager/fetures/tasks/domain/entities/task.dart';
 
 part 'task_model.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake)
-class TaskModel extends Task {
-  TaskModel({
-    required super.id,
-    required super.title,
-    required super.completed,
-  });
+class TaskModel {
+  final int? id;
+  final String title;
+  final bool completed;
+
+  TaskModel(this.id, this.title, this.completed);
 
   Map<String, dynamic> toJson() => _$TaskModelToJson(this);
 
@@ -20,11 +19,8 @@ class TaskModel extends Task {
       .map((dynamic map) => TaskModel.fromJson(map as Map<String, dynamic>))
       .toList();
 
-  factory TaskModel.fromDb(Map<String, dynamic> json) => TaskModel(
-    id: json['id'],
-    title: json['title'],
-    completed: json['completed'] == 1,
-  );
+  factory TaskModel.fromDb(Map<String, dynamic> json) =>
+      TaskModel(json['id'], json['title'], json['completed'] == 1);
 
   Map<String, dynamic> toJsonDb() => {
     'id': id,

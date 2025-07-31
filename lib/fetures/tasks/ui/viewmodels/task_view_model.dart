@@ -46,7 +46,7 @@ class TaskViewModel extends StateNotifier<AsyncValue<List<Task>>> {
       completed: completed,
     );
 
-    await updateCompleteTaskUseCase(task.id, updatedTask.completed);
+    await updateCompleteTaskUseCase(task.id!, updatedTask.completed);
 
     final updatedList = [
       for (final t in state.value!)
